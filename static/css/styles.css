@@ -1,0 +1,39 @@
+.width-40{
+	max-width: 40%;
+}
+.width-60{
+	max-width: 60%;
+}
+.inline-block{
+	display: inline-block;
+}
+
+
+#error{
+	margin: auto;
+	color: red;
+}
+#page-title{
+	text-align: center;
+	margin-bottom: 100px;
+}
+.dropdown-item {
+	padding: 4px 10px;
+}
+.dropdown-item img{
+	margin-right: 10px;
+}
+
+
+.index-half {
+	text-align: center;	
+}
+.index-half-btn{
+	padding: 20px;
+}
+.index-description {
+	color: gray;
+	padding: 50px;
+	width: 70%;
+	margin: auto;
+}
