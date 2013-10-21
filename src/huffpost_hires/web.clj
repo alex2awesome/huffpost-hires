@@ -8,7 +8,6 @@
             [ring.middleware.session :as session]
             [ring.middleware.session.cookie :as cookie]
             [ring.adapter.jetty :as jetty]
-            [ring.util.response :as response]
             [ring.middleware.basic-authentication :as basic]
             [cemerick.drawbridge :as drawbridge]
             [environ.core :refer [env]]))
@@ -22,6 +21,21 @@
       (session/wrap-session)
       (basic/wrap-basic-authentication authenticated?)))
 
+(defn serve-partial
+  "Handles serving the partial html files"
+  [request]
+  (println (request :uri))
+      {:status 200
+      :headers {}
+      :body (io/file (io/resource (str "public" (request :uri))))})
+
+(defn serve-hires
+  "Serves the hires.html template"
+  [request]
+  (println "serve-hires")
+      {:status 200
+      :headers {}
+      :body (io/file (io/resource "html/hires.html"))})
 
 (defroutes app
   (ANY "/repl" {:as req}
@@ -30,12 +44,9 @@
        {:status 200
         :headers {"Content-Type" "text/plain"}
         :body (pr-str ["Hello" :from 'Alex])})
-  (route/resources "/")
-  (ANY "*" []
-      {:status 200
-      :headers {}
-      :body (io/file (io/resource "html/hires.html"))})
-  (route/not-found (slurp (io/resource "html/404.html"))))
+  (GET "/partials/*" [] serve-partial)
+  (GET "/applicants" [] serve-hires)
+  (GET "/" [] serve-hires))
 
 (defn wrap-error-page [handler]
   (fn [req]
