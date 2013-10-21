@@ -46,7 +46,12 @@
         :body (pr-str ["Hello" :from 'Alex])})
   (GET "/partials/*" [] serve-partial)
   (GET "/applicants" [] serve-hires)
-  (GET "/" [] serve-hires))
+  (GET "/interviewers" [] serve-hires)
+  (GET "/applicant/*" [] serve-hires)
+  (GET "/interviewer/*" [] serve-hires)
+  (GET "/" [] serve-hires)
+  (route/resources "/")
+  (route/not-found (slurp (io/resource "html/404.html"))))
 
 (defn wrap-error-page [handler]
   (fn [req]

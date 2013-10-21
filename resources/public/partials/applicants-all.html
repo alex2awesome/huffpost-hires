@@ -24,7 +24,7 @@
                         <td><input type='text' placeholder='Full name' ng-model='new_applicant.name'></td>
                         <td><input type='text' placeholder='Role' ng-model='new_applicant.role'></td>
                         <td>
-                            <select id='AMvPM' ng-model="new_applicant.goalie" ng-options="interviewer.name for interviewer in interviewers">
+                            <select ng-model="new_applicant.goalie" ng-options="interviewer.name for interviewer in interviewers">
                                 <option value="">-select-</option>
                             </select>
                         </td>
