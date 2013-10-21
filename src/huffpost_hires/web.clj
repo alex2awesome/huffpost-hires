@@ -33,6 +33,7 @@
   "Serves the hires.html template"
   [request]
   (println "serve-hires")
+  (println ((request :params) :id))
       {:status 200
       :headers {}
       :body (io/file (io/resource "html/hires.html"))})
@@ -47,10 +48,10 @@
   (GET "/partials/*" [] serve-partial)
   (GET "/applicants" [] serve-hires)
   (GET "/interviewers" [] serve-hires)
-  (GET "/applicant/*" [] serve-hires)
+  (GET "/applicant" [] serve-hires)
   (GET "/interviewer/*" [] serve-hires)
-  (GET "/" [] serve-hires)
   (route/resources "/")
+  (GET "/" [] serve-hires)
   (route/not-found (slurp (io/resource "html/404.html"))))
 
 (defn wrap-error-page [handler]

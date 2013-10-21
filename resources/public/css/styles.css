@@ -20,17 +20,19 @@ div.text-left, .text-left{
 .float-right{
 	float: right;
 }
-div.text-right, .text-right{
+div.text-right, .text-right, .text-right input{
 	text-align: right;
 }
 input{
 	border-radius: 8px;
 	border: none;
 	padding: 2px 8px;
-	font-size: 13px;
+	font-size: 14px;
+	color: #575757;
 }
-h4 input{
-	font-size: 17px;
+h3 input{
+	font-size: 25px;
+	font-weight: 500;
 }
 
 

@@ -2,18 +2,15 @@ var HiresApp = angular.module('HiresApp', []);
 
 HiresApp.config(function($routeProvider, $locationProvider) {	
 	/* configure the routes */
-	$routeProvider.when('/', {
-		templateUrl: '/partials/index.html',
-	});
 
 
 	$routeProvider.when('/applicants', {
 		templateUrl: 'partials/applicants-all.html',
-		controller: ApplicantsCntl
+		controller: AllApplicantsCntl
 	});
-	$routeProvider.when('/applicant/:id', {
+	$routeProvider.when('/applicant', {
 		templateUrl: 'partials/applicant.html',
-		controller: ApplicantsCntl
+		controller: ApplicantCntl
 	});
 
 
@@ -22,6 +19,9 @@ HiresApp.config(function($routeProvider, $locationProvider) {
 		controller: InterviewersCntl
 	});
 
+	$routeProvider.when('/', {
+		templateUrl: '/partials/index.html',
+	});
 
 	$locationProvider.html5Mode(true);
 });

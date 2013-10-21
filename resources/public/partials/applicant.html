@@ -2,20 +2,20 @@
 <div class='container main-container' id='applicant-page'>
 
     <div id='applicant-info' class='row'>
-        <div class="index-half-left col-xs-5 col-md-5 text-right">
-            <button id='updateApplicantInfo-btn-left' ng-click="updateApplicantInfo()" class="float-left btn btn-default"><h3>Edit</h3></button>
-            <h4><span ng-show='editApplicantInfo==false'><h3>{{applicant.name}}</h3></span><input ng-show='editApplicantInfo==true' type='text' ng-model='applicant.name'></h4>
+        <div class="index-half-left col-xs-5 col-md-5 text-left">
+            <h3><span ng-show='editApplicantInfo==false'>{{applicant.name}}</span><input ng-show='editApplicantInfo==true' type='text' ng-model='applicant.name'></h3>
             <p><em>Role:</em> <span ng-show='editApplicantInfo==false'>{{applicant.role}}</span><input ng-show='editApplicantInfo==true' type='text' ng-model='applicant.role'></p>
-            <p><em>Goalie:</em> <span ng-show='editApplicantInfo==false'>{{applicant.goalie}}</span>
-                <select ng-show='editApplicantInfo==true' ng-model="applicant.goalie" ng-options="interviewer.name for interviewer in interviewers">
+            <p><em>Goalie:</em> <span ng-show='editApplicantInfo==false'>{{interviewersMap[applicant.goalie].name}}</span>
+                <select ng-show='editApplicantInfo==true' ng-model="applicant.goalie" ng-options="interviewer.name for interviewer in interviewersList">
                     <option value="applicant.goalie">-select-</option>
                 </select>
             </p>
         </div>
-        <div class="well index-half-right col-xs-5 col-md-5 text-right">
+        <div class="well index-half-right col-xs-5 col-md-5 text-left">
+            <button id='updateApplicantInfo-btn' ng-click="updateApplicantInfo()" class="float-right btn btn-default"><h3>Edit</h3></button>
             <a href=''>View Resume</a>
-            <p><em>Email:</em> {{applicant.email}}</p>
-            <p><em>Phonenumber:</em> {{applicant.phonenumber}}</p>
+            <p><em>Email:</em> <span ng-show='editApplicantInfo==false'>{{applicant.email}}</span><input ng-show='editApplicantInfo==true' type='text' ng-model='applicant.email'></p>
+            <p><em>Phonenumber:</em> <span ng-show='editApplicantInfo==false'>{{applicant.phonenumber}}</span><input ng-show='editApplicantInfo==true' type='text' ng-model='applicant.phonenumber'></p>
         </div>
     </div>
 
@@ -53,7 +53,7 @@
                     <tr ng-repeat="applicant in applicants | filter:applicants_filter | orderBy:'asof':true">
                         <td class="applicant-name"><a href="/applicant/{{applicant.id}}">{{applicant.name}}</a></td>
                         <td class="applicant-role">{{applicant.role}}</td>
-                        <td class="applicant-goalie">{{applicant.goalie}}</td>
+                        <td class="applicant-goalie">{{interviewersMap[applicant.goalie].name}}</td>
                         <td class="applicant-tasks">{{applicant.tasks}}</td>
                     </tr>
                 </tbody>
