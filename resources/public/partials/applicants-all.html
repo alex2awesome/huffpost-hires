@@ -1,0 +1,45 @@
+
+<div class='container main-container' id='applicants-all'>
+
+    <div id="applicants-container" class="panel panel-primary">
+        <div class="panel-heading">
+            <button id="add-applicant-button" ng-click="addNewPressed()" class="add-btn btn btn-success">+</button>
+            <span>Applicants</span>
+            <input class='search' id='search-applicants' type="search" ng-model="applicants_filter" placeholder="search applicants" />
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Goalie</th>
+                        <th>Tasks</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-show="addNew==true">
+                        <td><input type='text' placeholder='Full name' ng-model='new_applicant.name'></td>
+                        <td><input type='text' placeholder='Role' ng-model='new_applicant.role'></td>
+                        <td>
+                            <select id='AMvPM' ng-model="new_applicant.goalie" ng-options="interviewer.name for interviewer in interviewers">
+                                <option value="">-select-</option>
+                            </select>
+                        </td>
+                        <td><button id="add-applicant" ng-click="addApplicant()" class="btn btn-success">Add</button></td>
+                    </tr>
+
+                    <tr ng-repeat="applicant in applicants | filter:applicants_filter | orderBy:'asof':true">
+                        <td class="applicant-name"><a href="/applicant/{{applicant.id}}">{{applicant.name}}</a></td>
+                        <td class="applicant-role">{{applicant.role}}</td>
+                        <td class="applicant-goalie">{{applicant.goalie}}</td>
+                        <td class="applicant-tasks">{{applicant.tasks}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
