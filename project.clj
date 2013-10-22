@@ -1,5 +1,5 @@
 (defproject huffpost-hires "1.0.0-SNAPSHOT"
-  :description "FIXME: write description"
+  :description "Created by Huffpost Labs"
   :url "http://huffpost-hires.herokuapp.com"
   :license {:name "FIXME: choose"
             :url "http://example.com/FIXME"}
