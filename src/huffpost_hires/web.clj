@@ -10,7 +10,9 @@
             [ring.adapter.jetty :as jetty]
             [ring.middleware.basic-authentication :as basic]
             [cemerick.drawbridge :as drawbridge]
-            [environ.core :refer [env]]))
+            [environ.core :refer [env]]
+
+            [huffpost-hires.api :as api]))
 
 (defn- authenticated? [user pass]
   ;; TODO: heroku config:add REPL_USER=[...] REPL_PASSWORD=[...]
@@ -41,6 +43,7 @@
 (defroutes app
   (ANY "/repl" {:as req}
        (drawbridge req))
+  (GET "/interviewers" [] api/interviewers-all)
   (GET "/test" []
        {:status 200
         :headers {"Content-Type" "text/plain"}
@@ -73,6 +76,10 @@
                          (site {:session {:store store}}))
                      {:port port :join? false})))
 
+
 ;; For interactive development:
-;; (.stop server)
-;; (def server (-main))
+(defonce server (-main))
+
+(defn stop [] 
+  (.stop server))
+
