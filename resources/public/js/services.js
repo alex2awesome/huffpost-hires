@@ -97,11 +97,13 @@ HiresApp.factory('APIService', function($rootScope, $http, $q){
 
         httpGET('/applicant/complete-tasks?id=' + applicantID, applicantID).then(function(completeTasksData) {
           waitingOn --;
+          $rootScope.completeTasks = completeTasksData;
           if (completeTasksData.length > 0) { $rootScope.applicant['complete-tasks'] = completeTasksData; }
           if ((waitingOn == 0) && callback) callback();
         });
         httpGET('/applicant/incomplete-tasks?id=' + applicantID, applicantID).then(function(incompleteTasksData) {
           waitingOn --;
+          $rootScope.incompleteTasks = incompleteTasksData;
           if (incompleteTasksData.length > 0) $rootScope.applicant['incomplete-tasks'] = incompleteTasksData;
           if ((waitingOn == 0) && callback) callback();
         });

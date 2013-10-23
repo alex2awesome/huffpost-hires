@@ -1,19 +1,4 @@
 
-// dummy interviewers
-var interviewer1 = {'id':0, 'name':'Brandon Diamond','phone':'111-222-3333','email':'bbbbbbbbb@c.co'};
-var interviewer2 = {'id':1, 'name':'Adam lastname','phone':'111-222-3333','email':'bbbbbbbbb@c.co'};
-var interviewer3 = {'id':2, 'name':'Sam lastname','phone':'111-222-3333','email':'bbbbbbbbb@c.co'};
-
-//dummy applicants
-var app1 = {'id':0,'name':'Alex Berke', 'goalie':interviewer1.id, 'email':'aaaaaaaaaaaaaaa@b.com', 'phonenumber': '111-222-3333', 'role':'Developer', 'asof':'Datetime','tasks':[]};
-var app2 = {'id':1,'name':'Mila Kunis', 'goalie':interviewer2.id, 'email':'aaaaaaaaaaaaaaa@b.com', 'phonenumber': '111-222-3333', 'role':'Designer', 'asof':'Datetime', 'tasks':[]};
-var app3 = {'id':2,'name':'Angelina Jolie', 'goalie':interviewer3.id, 'email':'aaaaaaaaaaaaaaa@b.com', 'phonenumber': '111-222-3333', 'role':'Scala Engineer','asof':'Datetime','tasks':[]};
-
-//dummy tasks
-var task1 = {'id':0, 'title':'Resume Review', 'applicant':app1.id, 'interviewer':interviewer1.id,'feedback':'','completed':false,'pass-fail':true,'date':'datetime','feedback-due':'datetime'};
-var task2 = {'id':1, 'title':'Resume Review', 'applicant':app1.id, 'interviewer':interviewer1.id,'feedback':'','completed':false,'pass-fail':true,'date':'datetime','feedback-due':'datetime'};
-var task3 = {'id':2, 'title':'Resume Review', 'applicant':app1.id, 'interviewer':interviewer1.id,'feedback':'','completed':false,'pass-fail':true,'date':'datetime','feedback-due':'datetime'};
-
 function MainCntl($scope, $location, UIService, APIService) {
 	$scope.domain = window.location.origin;
 
@@ -94,6 +79,9 @@ function AllApplicantsCntl($scope, $location, APIService) {
 function ApplicantCntl($scope, $routeParams, APIService) {
 
 	$scope.editApplicantInfo = false;
+
+	$scope.completeTasks;
+	$scope.incompleTasks;
 
 	var updateApplicantInfoShow = function(){
 		$scope.editApplicantInfo = true;
