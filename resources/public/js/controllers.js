@@ -18,7 +18,7 @@ function MainCntl($scope, $location, UIService, APIService) {
 	$scope.domain = window.location.origin;
 
 	$scope.interviewersMap; //= {0:interviewer1,1:interviewer2,2:interviewer3};
-	$scope.interviewersList; //= [interviewer1, interviewer2, interviewer3];
+	$scope.interviewersList; //= [interviewer1, interviewer2, interviewer3]; where is this populated?
 	
 	$scope.applicantsList;
 	$scope.applicantsMap; // = {0: app1,1:app2,2:app3};
@@ -133,7 +133,6 @@ function AllApplicantsCntl($scope, $location) {
 }
 
 function InterviewersCntl($scope, $location) {
-
 
 	var init = function() {
 
