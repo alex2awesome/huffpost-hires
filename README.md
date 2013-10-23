@@ -9,13 +9,13 @@ Running Locally
 * Download jvm and leiningen so that you can call ```lein```
 * clone the repo
 * Within the root folder of huffpost-hires setup the environment ```$ source env.sh```
-* Start up the REPL ```lein repl```
+* Start up the REPL ```$ lein repl```
 * Build the tables
 
 ```
-(use 'huffpost-hires.models)
-(huffpost-hires.models/init-tables)
+user=> (use 'huffpost-hires.models)
+user=> (huffpost-hires.models/init-tables)
 ```
 
-* Import and run the server locally all in one call ```(use 'huffpost-hires.web)```
+* Import and run the server locally all in one call ```user=> (use 'huffpost-hires.web)```
 * Visit <http://0.0.0.0:5000>
