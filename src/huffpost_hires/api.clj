@@ -30,73 +30,67 @@
 ;; /api/interviewer/?id='interviewerID'
 (defn interviewer
 	"Returns specified interviewer"
-	[request]
-	(println (str "api/interviewer with request:" request))
-	(models/query-json [(str "SELECT * FROM interviewers WHERE id=" (request :id))]))
+	[params]
+	(println (str "api/interviewer with params:" params))
+	(models/query-json [(str "SELECT * FROM interviewers WHERE id=" (params :id))]))
 
 ;; /api/applicant/complete-tasks?id='applicantID'
 (defn complete-tasks-by-applicant
 	"Returns all completed tasks for applicant"
-	[request]
-	(println (str "/api/applicant/complete-tasks with request:" request))
-	(models/query-json [(str "select * from tasks WHERE applicant=" (request :id) " AND completed=TRUE")]))
+	[params]
+	(println (str "/api/applicant/complete-tasks with params:" params))
+	(models/query-json [(str "select * from tasks WHERE applicant=" (params :id) " AND completed=1")]))
 
 ;; /api/applicant/incomplete-tasks?id='applicantID'
 (defn incomplete-tasks-by-applicant
-	"Returns all completed tasks for applicant"
-	[request]
-	(println (str "/api/applicant/incomplete-tasks with request:" request))
-	(models/query-json [(str "select * from tasks where applicant=" (request :id))]))
+	[params]
+	(models/query-json [(str "select * from tasks WHERE applicant=" (params :id) " AND completed=0")]))
 
 ;; /api/interviewer/complete-tasks?id='interviewID'
 (defn complete-tasks-by-interviewer
-	"Returns all completed tasks for interviewer"
-	[request]
-	(println (str "/api/interviewer/complete-tasks with request:" request))
-	(models/query-json [(str "select * from tasks where interviewer=" (request :id))]))
+	[params]
+	(models/query-json [(str "select * from tasks where interviewer=" (params :id) " AND completed=1")]))
 
 ;; /api/interviewer/incomplete-tasks?id='interviewID'
 (defn incomplete-tasks-by-interviewer
 	"Returns all completed tasks for interviewer"
-	[])
+	[params]
+	(models/query-json [(str "select * from tasks where interviewer=" (params :id) " AND completed=0")]))
 
 (defn handle-get-request-applicant
-	"Called upon GET request to url /api/applicant/*"
+	"routing helper for handle-get-request:
+	Called upon GET request to url /api/applicant/*"
 	[route params] ; route == * in the GET request
 	(println (str "api/handle-get-request-applicant with route: " route "; params: " params))
-	(if (= route "")
-		(applicant params)
-		(if (= route "all")
-			(applicants-all)
-			(if (= route "complete-tasks")
-				(complete-tasks-by-applicant params)
-				(if (= route "incomplete-tasks")
-					(incomplete-tasks-by-applicant params)
-					(str "Invalid api request to /api/applicant/" route))))))
+	(case route
+		"" (applicant params)
+		"all" (applicants-all)
+		"complete-tasks" (complete-tasks-by-applicant params)
+		"incomplete-tasks" (incomplete-tasks-by-applicant params)
+		(str "Invalid api request to /api/applicant/" route)))
+
 
 (defn handle-get-request-interviewer
-	"Called upon GET request to url /api/interviewer/*"
+	"routing helper for handle-get-request:
+	Called upon GET request to url /api/interviewer/*"
 	[route params] ; route == * in the GET request
-	(println (str "api/handle-get-request-interviewer with route: " route "; params: " params))
-	(if (= route "")
-		(interviewer params)
-		(if (= route "all")
-			(interviewers-all)
-			(if (= route "complete-tasks")
-				(complete-tasks-by-interviewer params)
-				(if (= route "incomplete-tasks")
-					(incomplete-tasks-by-interviewer params)
-					(str "Invalid api request to /api/interviewer/" route))))))
+
+	(case route
+		"" (interviewer params)
+		"all" (interviewers-all)
+		"complete-tasks" (complete-tasks-by-interviewer params)
+		"incomplete-tasks" (incomplete-tasks-by-interviewer params)
+		(str "Invalid api request to /api/interviewer/" route)))
+
 
 (defn handle-get-request
 	"Called by web upon GET request to url /api/*/*"
 	[request]
-	(println request)
 
 	(let [params (request :params) route (params :*) route-prefix (first route) route-suffix (second route)]
 		(println (str "params: " params))
 		(println (str "route:" route))
-		(case (first route)
+		(case route-prefix
 			"applicant" (handle-get-request-applicant route-suffix params)
 			"interviewer" (handle-get-request-interviewer route-suffix params)
 			"Invalid api request")))

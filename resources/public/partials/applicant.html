@@ -23,7 +23,7 @@
     <div id="tasks-container" class="panel panel-primary">
         <div class="panel-heading">
             <button id="add-applicant-button" ng-click="addNewPressed()" class="add-btn btn btn-success">+</button>
-            <span>Applicants</span>
+            <span>Tasks</span>
         </div>
 
         <div class="panel-body">
@@ -31,7 +31,7 @@
                 <thead>
                     <tr>
                         <th>Task</th>
-                        <th>Due</th>
+                        <th>Date</th>
                         <th>Assignee</th>
                         <th>Feedback Due</th>
                         <th>Feedback</th>
@@ -40,21 +40,29 @@
                 </thead>
                 <tbody>
                     <tr ng-show="addNew==true">
-                        <td><input type='text' placeholder='Task name' ng-model='new_applicant.name'></td>
-                        <td><input type='text' placeholder='Role' ng-model='new_applicant.role'></td>
+                        <td><input type='text' placeholder='Task name' ng-model='new_task.name'></td>
+                        <td><input type='text' placeholder='Role' ng-model='new_task.role'></td>
                         <td>
-                            <select id='AMvPM' ng-model="new_applicant.goalie" ng-options="interviewer.name for interviewer in interviewers">
+                            <select ng-model="new_task.goalie" ng-options="interviewer.name for interviewer in interviewers">
                                 <option value="">-select-</option>
                             </select>
                         </td>
-                        <td><button id="add-applicant" ng-click="addApplicant()" class="btn btn-success">Add</button></td>
+                        <td><button id="add-task" ng-click="addTask()" class="btn btn-success">Add</button></td>
                     </tr>
 
+<<<<<<< HEAD
                     <tr ng-repeat="applicant in applicantsList | filter:applicants_filter | orderBy:'asof':true">
                         <td class="applicant-name"><a href="/applicant/?id={{applicant.id}}">{{applicant.name}}</a></td>
                         <td class="applicant-role">{{applicant.role}}</td>
                         <td class="applicant-goalie">{{interviewersMap[applicant.goalie].name}}</td>
                         <td class="applicant-tasks">{{applicant.tasks}}</td>
+=======
+                    <tr ng-repeat="task in completeTasks | orderBy:'date'">
+                        <td class="task-title"><a href="/applicant/{{applicant.id}}">{{task.title}}</a></td>
+                        <td class="task-date">{{applicant.role}}</td>
+                        <td class="task-assignee">{{task.interviewer}}</td>
+                        <td class="task-feedback-due">{{task.feedback_due}}</td>
+>>>>>>> 7c4c6fdf97fa0313e7d112c669a645894402a4c3
                     </tr>
                 </tbody>
             </table>

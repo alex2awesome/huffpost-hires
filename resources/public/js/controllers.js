@@ -1,19 +1,4 @@
 
-// dummy interviewers
-var interviewer1 = {'id':0, 'name':'Brandon Diamond','phone':'111-222-3333','email':'bbbbbbbbb@c.co'};
-var interviewer2 = {'id':1, 'name':'Adam lastname','phone':'111-222-3333','email':'bbbbbbbbb@c.co'};
-var interviewer3 = {'id':2, 'name':'Sam lastname','phone':'111-222-3333','email':'bbbbbbbbb@c.co'};
-
-//dummy applicants
-var app1 = {'id':0,'name':'Alex Berke', 'goalie':interviewer1.id, 'email':'aaaaaaaaaaaaaaa@b.com', 'phonenumber': '111-222-3333', 'role':'Developer', 'asof':'Datetime','tasks':[]};
-var app2 = {'id':1,'name':'Mila Kunis', 'goalie':interviewer2.id, 'email':'aaaaaaaaaaaaaaa@b.com', 'phonenumber': '111-222-3333', 'role':'Designer', 'asof':'Datetime', 'tasks':[]};
-var app3 = {'id':2,'name':'Angelina Jolie', 'goalie':interviewer3.id, 'email':'aaaaaaaaaaaaaaa@b.com', 'phonenumber': '111-222-3333', 'role':'Scala Engineer','asof':'Datetime','tasks':[]};
-
-//dummy tasks
-var task1 = {'id':0, 'title':'Resume Review', 'applicant':app1.id, 'interviewer':interviewer1.id,'feedback':'','completed':false,'pass-fail':true,'date':'datetime','feedback-due':'datetime'};
-var task2 = {'id':1, 'title':'Resume Review', 'applicant':app1.id, 'interviewer':interviewer1.id,'feedback':'','completed':false,'pass-fail':true,'date':'datetime','feedback-due':'datetime'};
-var task3 = {'id':2, 'title':'Resume Review', 'applicant':app1.id, 'interviewer':interviewer1.id,'feedback':'','completed':false,'pass-fail':true,'date':'datetime','feedback-due':'datetime'};
-
 function MainCntl($scope, $location, UIService, APIService) {
 	$scope.domain = window.location.origin;
 
@@ -21,10 +6,11 @@ function MainCntl($scope, $location, UIService, APIService) {
 	$scope.interviewersList; //= [interviewer1, interviewer2, interviewer3]; where is this populated?
 	
 	$scope.applicantsList;
-	$scope.applicantsMap; // = {0: app1,1:app2,2:app3};
+	$scope.applicantsMap; 
+	$scope.applicant;
 
-	$scope.tasksMap; //= {0:task1, 1: task2, 2: task3};
-	$scope.tasksList; //= [task1, task2, task3];
+	$scope.tasksMap;
+	$scope.tasksList;
 
 	$scope.addNew = false;
 
@@ -45,33 +31,56 @@ function MainCntl($scope, $location, UIService, APIService) {
 
 	$scope.addNewPressed = function(){ $scope.addNew ? $scope.showAddNew() : $scope.hideAddNew(); }
 
+	var init = function() {
+		$('.popover-hover').popover({trigger: 'hover'});	
+	}
+	init();
+}
+function HomeCntl($scope){
+
+	var init = function() {
+	}
+	init();
+}
+function AllApplicantsCntl($scope, $location, APIService) {
+
+
+
+	$scope.addApplicant = function(new_applicant) {
+		console.log('new_applicant:');
+		console.log(new_applicant);
+
+		new_applicant.goalie = new_applicant.goalie.id;
+		/* TODO -- POST TO SERVER */
+		$scope.applicants[new_applicant.id] = new_applicant;
+		$scope.new_applicant = null;
+		$scope.hideAddNew();
+	}
+
+
 
 	var init = function() {
 		APIService.getInterviewers(function() {
-			$scope.interviewersMap = APIService.listToMap($scope.interviewersList);
 			console.log('Interviewers List:');
 			console.log($scope.interviewersList);
 			console.log('interviewersMap');
 			console.log($scope.interviewersMap);
 		});
-		///*
 		APIService.getApplicants(function() {
-			$scope.applicantsMap = APIService.listToMap($scope.applicantsList);
 			console.log('applicantsList');
 			console.log($scope.applicantsList);
 			console.log('applicantsMap');
 			console.log($scope.applicantsMap);
-		})
-		//*/
-		$('.popover-hover').popover({trigger: 'hover'});	
+		});
 	}
 	init();
 }
 function ApplicantCntl($scope, $routeParams, APIService) {
 
-	$scope.applicantTasks;
-
 	$scope.editApplicantInfo = false;
+
+	$scope.completeTasks;
+	$scope.incompleTasks;
 
 	var updateApplicantInfoShow = function(){
 		$scope.editApplicantInfo = true;
@@ -87,52 +96,31 @@ function ApplicantCntl($scope, $routeParams, APIService) {
 		$scope.editApplicantInfo ? updateApplicantInfoSave() : updateApplicantInfoShow();
 	}	
 	var init = function() {
+		APIService.getApplicant($routeParams.id, function() {
+			console.log('applicant:');
+			console.log($scope.applicant);
+		});
 		APIService.getInterviewers(function() {
-			$scope.interviewersMap = APIService.listToMap($scope.interviewersList);
 			console.log('Interviewers List:');
 			console.log($scope.interviewersList);
 			console.log('interviewersMap');
 			console.log($scope.interviewersMap);
 		});
-		///*
-		APIService.getApplicants(function() {
-			$scope.applicantsMap = APIService.listToMap($scope.applicantsList);
-			console.log('applicantsList');
-			console.log($scope.applicantsList);
-			console.log('applicantsMap');
-			console.log($scope.applicantsMap);
-
-			/* TODO: SEND IN RESOLVE? */
-			$scope.applicant = $scope.applicantsMap[$routeParams.id];
-		})
-		//*/
-	}
-	init();
-}
-function AllApplicantsCntl($scope, $location) {
-
-
-
-	$scope.addApplicant = function(new_applicant) {
-		console.log('new_applicant:');
-		console.log(new_applicant);
-
-		new_applicant.goalie = new_applicant.goalie.id;
-		/* TODO -- POST TO SERVER */
-		new_applicant['id'] = $scope.applicants.length;
-		$scope.applicants[new_applicant.id] = new_applicant;
-		$scope.new_applicant = null;
-		$scope.hideAddNew();
-	}
-
-
-
-	var init = function() {
 	}
 	init();
 }
 
+function AllInterviewersCntl($scope, UIService, APIService) {
+	/* ALEX SPANGER EDITS HERE */
+
+}
+
+<<<<<<< HEAD
 function InterviewersCntl($scope, $location) {
+=======
+function InterviewerCntl($scope, $location) {
+	/* ALEX SPANGER EDITS HERE */
+>>>>>>> 7c4c6fdf97fa0313e7d112c669a645894402a4c3
 
 	var init = function() {
 

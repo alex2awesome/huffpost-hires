@@ -15,12 +15,17 @@ HiresApp.config(function($routeProvider, $locationProvider) {
 
 
 	$routeProvider.when('/interviewers', {
-		templateUrl: 'partials/interviewers.html',
-		controller: InterviewersCntl
+		templateUrl: 'partials/interviewers-all.html',
+		controller: AllInterviewersCntl
+	});
+	$routeProvider.when('/interviewer', {
+		templateUrl: 'partials/interviewer.html',
+		controller: InterviewerCntl
 	});
 
 	$routeProvider.when('/', {
 		templateUrl: '/partials/index.html',
+		controller: HomeCntl
 	});
 
 	$locationProvider.html5Mode(true);
