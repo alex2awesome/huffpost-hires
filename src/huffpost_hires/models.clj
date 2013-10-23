@@ -29,8 +29,8 @@
 						[:phone :string]
 						[:resume :string] ;; for now it can be a hyperlink to a googledoc
 						[:asof :string] ;; JSON date created in javascript clientside
-						[:pass :boolean]
-						[:completed :boolean]))
+						[:pass :integer] ; 0/1 boolean
+						[:completed :integer])) ; 0/1 boolean
 		(catch Exception e 
 			(println (str "EXCEPTION in make-table-applicants: " e)))))
 
@@ -48,8 +48,8 @@
 				:role "Developer"
 				:resume "www.google.com"
 				:asof "2013-10-22T20:02:02.920Z"
-				:pass true
-				:completed false}
+				:pass 1 ; 0/1 boolean
+				:completed 0} ; 0/1 boolean
 			{:id 2 
 				:name "Angelina Jolie"
 				:goalie 2
@@ -58,8 +58,8 @@
 				:role "Developer"
 				:resume "www.google.com"
 				:asof "2013-10-22T20:02:02.920Z"
-				:pass true
-				:completed false}
+				:pass 1
+				:completed 0}
 			{:id 3 
 				:name "Mila Kunis"
 				:goalie 3
@@ -68,8 +68,8 @@
 				:role "Developer"
 				:resume "www.google.com"
 				:asof "2013-10-22T20:02:02.920Z"
-				:pass true
-				:completed false})))
+				:pass 1 ; 0/1 boolean
+				:completed 0}))) ; 0/1 boolean
 
 (defn make-table-interviewers
 	"Creating the Interviewers Table in our database."
@@ -117,8 +117,8 @@
 				[:feedback :string]
 				[:date :string] ; JSON date created in javascript clientside
 				[:feedback_due :string] ; JSON date created in javascript clientside
-				[:completed :boolean]
-				[:pass :boolean]))))
+				[:completed :integer] ; 0/1 boolean
+				[:pass :integer])))) ; 0/1 boolean
 
 (defn init-table-tasks
 	"Fill Tasks table with dummy data"
@@ -134,8 +134,8 @@
 				:feedback "She is over qualified -- great internship at Huffpost!"
 				:date "2013-10-22T20:02:02.920Z"
 				:feedback_due "2013-10-22T20:02:02.920Z"
-				:completed true
-				:pass true}
+				:completed 1
+				:pass 1}
 			{:id 2
 				:applicant 2
 				:interviewer 2
@@ -143,8 +143,8 @@
 				:feedback "She is over qualified -- great internship at Huffpost!"
 				:date "2013-10-22T20:02:02.920Z"
 				:feedback_due "2013-10-22T20:02:02.920Z"
-				:completed true
-				:pass true}
+				:completed 1
+				:pass 1}
 			{:id 3
 				:applicant 3
 				:interviewer 1
@@ -152,8 +152,8 @@
 				:feedback ""
 				:date "2013-10-22T20:02:02.920Z"
 				:feedback_due "2013-10-22T20:02:02.920Z"
-				:completed false
-				:pass true}
+				:completed 0
+				:pass 1}
 			{:id 4
 				:applicant 1
 				:interviewer 2
@@ -161,8 +161,8 @@
 				:feedback "She has such a heavy accent."
 				:date "2013-10-22T20:02:02.920Z"
 				:feedback_due "2013-10-22T20:02:02.920Z"
-				:completed true
-				:pass true}
+				:completed 1
+				:pass 1}
 			{:id 4
 				:applicant 2
 				:interviewer 2
@@ -170,8 +170,8 @@
 				:feedback "She has such a heavy accent."
 				:date "2013-10-22T20:02:02.920Z"
 				:feedback_due "2013-10-22T20:02:02.920Z"
-				:completed true
-				:pass true}
+				:completed 1
+				:pass 1}
 			{:id 4
 				:applicant 3
 				:interviewer 3
@@ -179,8 +179,8 @@
 				:feedback ""
 				:date "2013-10-22T20:02:02.920Z"
 				:feedback_due "2013-10-22T20:02:02.920Z"
-				:completed false
-				:pass true})))
+				:completed 0
+				:pass 1})))
 
 (defn init-tables
   "Create all of the tables in our database and fill each with dummy data."
@@ -208,6 +208,7 @@
 	execute a query or statement with params, the sql string should come first,
 	followed by the params to be bound."
 	[sql]
+	(println (str "Executing sql query: " sql))
 	(try
 		(jdbc/with-connection db
 			(jdbc/with-query-results rs sql
