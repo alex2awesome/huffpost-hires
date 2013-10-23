@@ -3,6 +3,10 @@ huffpost-hires
 
 Hiring is hard ...but is Clojure?
 
+Description
+----
+Wants to be more than a glorified spreadsheet.
+
 Running Locally
 ----
 
