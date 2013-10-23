@@ -1,113 +1,117 @@
-;; Many thanks to https://github.com/diamondap/ring-sample
 (ns huffpost-hires.api
-  (:require [cheshire.core :as json]
-            [clojure.java.jdbc :as jdbc]))
+	(require [huffpost-hires.models :as models]))
 
-(def db (System/getenv "DATABASE_URL"))
-
-; Tasks are the glue between Applicants and Interviewers.  
-; Each task has a relation to an Interviewer and an Applicant
-
-; 		  Applicant
-; 		 /	|	\   \
-; 	Task  Task  Task  Task
-; 		\   |	 |	/
-; 		Interviewer
+;; Handles routing api requests
 
 
 
-(defn make-table-applicants
-	"Create the Applicants Table in our database."
-	[]
-	(try (jdbc/with-connection db
-		(jdbc/create-table :applicants
-						[:id :integer]
-						[:name :string]
-						[:email :string]
-						[:role :string]
-						[:phone :string]
-						[:resume :string] ;; for now it can be a hyperlink to a googledoc
-						[:asof :datetime]
-						[:pass :boolean]
-						[:completed :boolean]))
-		(catch Exception e 
-			(println (str "EXCEPTION in make-table-applicants: " e)))))
 
-(defn init-applicants-table
-  []
-  (println "Initializing Applicants Table.")
-  (println "TODO: init-applicants-table")
-  ;(make-table-applicants)
-  )
-
-(defn make-table-interviewers
-	"Creating the Interviewers Table in our database."
-	[]
-	(println "Making the Interviewers Table in database.")
-	(try (jdbc/with-connection db
-		(jdbc/create-table :interviewers
-						[:id :integer]
-						[:name :string]
-						[:email :string]
-						[:phone :string]))
-		(catch Exception e 
-			(println (str "EXCEPTION in make-table-interviewers: " e)))))
-
-(defn init-interviewers-table
-	"Fill Interviewers table with data"
-	[]
-	(make-table-interviewers)
-	(println "Initializing Interviewers table")
-	(jdbc/with-connection db
-		(jdbc/insert-records :interviewers
-			{:id 1 
-				:name "Fred Flintstone"
-				:phone "12223334444"
-				:email "alexandra.berke@huffingtonpost.com"}
-			{:id 2 
-				:name "Alice Flintstone"
-				:phone "12223334444"
-				:email "alexandra.berke@huffingtonpost.com"}
-			{:id 3 
-				:name "Amy Flintstone"
-				:phone "12223334444"
-				:email "alexandra.berke@huffingtonpost.com"})))
-
-(defn init-tables
-  "Create all of the tables in our database and fill each with dummy data."
-  []
-  ;(init-applicants-table)
-  (init-interviewers-table))
-
-(defn query
-	"Executes a query. Returns a vector of results. Each item in the vector
-	is a hash, keyed by column name. Param sql must be a vector. To execute
-	a simple SQL string, pass in a vector containing only the string. To
-	execute a query or statement with params, the sql string should come first,
-	followed by the params to be bound."
-	[sql]
-	(try
-		(jdbc/with-connection db
-			(jdbc/with-query-results rs sql
-				(into [] rs)))
-		(catch Throwable t (prn sql) (throw t))))
-
-(defn query-json
-	"Executes a query and returns the result as json. Param sql should be a
-	vector with [sql-string params...] or just [sql-string]."
-	[sql]
-		(json/generate-string (query sql)))
-
+;; /api/interviewer/all
 (defn interviewers-all
 	"Returns All Interviewers in Database in json"
-	[request]
+	[]
 	(println "api/interviewers-all")
-	(let [statement "select * from interviewers order by name"]
-		(if (empty? (try (query [statement]) (catch Exception ex [])))
-			(init-tables))
-		(query-json [statement])))
+	(models/query-json ["select * from interviewers order by name"]))
 
+;; /api/applicant/all
+(defn applicants-all
+	"Returns All Interviewers in Database in json"
+	[]
+	(println "api/applicants-all")
+	(models/query-json ["select * from applicants"]))
 
+;; /api/applicant/?id='applicantID'
+(defn applicant
+	"Returns specified applicant"
+	[request]
+	(println (str "api/appicant with request:" request))
+	(models/query-json [(str "SELECT * FROM applicants WHERE id=" (request :id))]))
+
+;; /api/interviewer/?id='interviewerID'
+(defn interviewer
+	"Returns specified interviewer"
+	[request]
+	(println (str "api/interviewer with request:" request))
+	(models/query-json [(str "SELECT * FROM interviewers WHERE id=" (request :id))]))
+
+;; /api/applicant/complete-tasks?id='applicantID'
+(defn complete-tasks-by-applicant
+	"Returns all completed tasks for applicant"
+	[request]
+	(println (str "/api/applicant/complete-tasks with request:" request))
+	(models/query-json [(str "select * from tasks WHERE applicant=" (request :id) " AND completed=TRUE")]))
+
+;; /api/applicant/incomplete-tasks?id='applicantID'
+(defn incomplete-tasks-by-applicant
+	"Returns all completed tasks for applicant"
+	[request]
+	(println (str "/api/applicant/incomplete-tasks with request:" request))
+	(models/query-json [(str "select * from tasks where applicant=" (request :id))]))
+
+;; /api/interviewer/complete-tasks?id='interviewID'
+(defn complete-tasks-by-interviewer
+	"Returns all completed tasks for interviewer"
+	[request]
+	(println (str "/api/interviewer/complete-tasks with request:" request))
+	(models/query-json [(str "select * from tasks where interviewer=" (request :id))]))
+
+;; /api/interviewer/incomplete-tasks?id='interviewID'
+(defn incomplete-tasks-by-interviewer
+	"Returns all completed tasks for interviewer"
+	[])
+
+(defn handle-get-request-applicant
+	"Called upon GET request to url /api/applicant/*"
+	[route params] ; route == * in the GET request
+	(println (str "api/handle-get-request-applicant with route: " route "; params: " params))
+	(if (= route "")
+		(applicant params)
+		(if (= route "all")
+			(applicants-all)
+			(if (= route "complete-tasks")
+				(complete-tasks-by-applicant params)
+				(if (= route "incomplete-tasks")
+					(incomplete-tasks-by-applicant params)
+					(str "Invalid api request to /api/applicant/" route))))))
+
+(defn handle-get-request-interviewer
+	"Called upon GET request to url /api/interviewer/*"
+	[route params] ; route == * in the GET request
+	(println (str "api/handle-get-request-interviewer with route: " route "; params: " params))
+	(if (= route "")
+		(interviewer params)
+		(if (= route "all")
+			(interviewers-all)
+			(if (= route "complete-tasks")
+				(complete-tasks-by-interviewer params)
+				(if (= route "incomplete-tasks")
+					(incomplete-tasks-by-interviewer params)
+					(str "Invalid api request to /api/interviewer/" route))))))
+
+(defn handle-get-request
+	"Called by web upon GET request to url /api/*/*"
+	[request]
+	(println request)
+
+	(let [params (request :params) route (params :*) route-prefix (first route) route-suffix (second route)]
+		(println (str "params: " params))
+		(println (str "route:" route))
+		(case (first route)
+			"applicant" (handle-get-request-applicant route-suffix params)
+			"interviewer" (handle-get-request-interviewer route-suffix params)
+			"Invalid api request")))
+
+(defn handle-post-request
+	[request]
+	(println "TODO: handle-post-request"))
+
+(defn handle-put-request
+	[request]
+	(println "TODO: handle-put-request"))
+
+(defn handle-delete-request
+	[request]
+	(println "TODO: handle-delete-request"))
 
 
 
