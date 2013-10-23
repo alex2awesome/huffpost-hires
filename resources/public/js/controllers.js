@@ -21,10 +21,11 @@ function MainCntl($scope, $location, UIService, APIService) {
 	$scope.interviewersList; //= [interviewer1, interviewer2, interviewer3];
 	
 	$scope.applicantsList;
-	$scope.applicantsMap; // = {0: app1,1:app2,2:app3};
+	$scope.applicantsMap; 
+	$scope.applicant;
 
-	$scope.tasksMap; //= {0:task1, 1: task2, 2: task3};
-	$scope.tasksList; //= [task1, task2, task3];
+	$scope.tasksMap;
+	$scope.tasksList;
 
 	$scope.addNew = false;
 
@@ -45,71 +46,18 @@ function MainCntl($scope, $location, UIService, APIService) {
 
 	$scope.addNewPressed = function(){ $scope.addNew ? $scope.showAddNew() : $scope.hideAddNew(); }
 
-
 	var init = function() {
-		APIService.getInterviewers(function() {
-			$scope.interviewersMap = APIService.listToMap($scope.interviewersList);
-			console.log('Interviewers List:');
-			console.log($scope.interviewersList);
-			console.log('interviewersMap');
-			console.log($scope.interviewersMap);
-		});
-		///*
-		APIService.getApplicants(function() {
-			$scope.applicantsMap = APIService.listToMap($scope.applicantsList);
-			console.log('applicantsList');
-			console.log($scope.applicantsList);
-			console.log('applicantsMap');
-			console.log($scope.applicantsMap);
-		})
-		//*/
 		$('.popover-hover').popover({trigger: 'hover'});	
 	}
 	init();
 }
-function ApplicantCntl($scope, $routeParams, APIService) {
+function HomeCntl($scope){
 
-	$scope.applicantTasks;
-
-	$scope.editApplicantInfo = false;
-
-	var updateApplicantInfoShow = function(){
-		$scope.editApplicantInfo = true;
-		$('#updateApplicantInfo-btn').html('<h3>Save</h3>');
-	}
-	var updateApplicantInfoSave = function() {
-		/* TODO: PUT WITH APISERVICE */
-		$scope.editApplicantInfo = false;
-		$('#updateApplicantInfo-btn').html('<h3>Edit</h3>');
-	}
-
-	$scope.updateApplicantInfo = function(){
-		$scope.editApplicantInfo ? updateApplicantInfoSave() : updateApplicantInfoShow();
-	}	
 	var init = function() {
-		APIService.getInterviewers(function() {
-			$scope.interviewersMap = APIService.listToMap($scope.interviewersList);
-			console.log('Interviewers List:');
-			console.log($scope.interviewersList);
-			console.log('interviewersMap');
-			console.log($scope.interviewersMap);
-		});
-		///*
-		APIService.getApplicants(function() {
-			$scope.applicantsMap = APIService.listToMap($scope.applicantsList);
-			console.log('applicantsList');
-			console.log($scope.applicantsList);
-			console.log('applicantsMap');
-			console.log($scope.applicantsMap);
-
-			/* TODO: SEND IN RESOLVE? */
-			$scope.applicant = $scope.applicantsMap[$routeParams.id];
-		})
-		//*/
 	}
 	init();
 }
-function AllApplicantsCntl($scope, $location) {
+function AllApplicantsCntl($scope, $location, APIService) {
 
 
 
@@ -128,12 +76,60 @@ function AllApplicantsCntl($scope, $location) {
 
 
 	var init = function() {
+		APIService.getInterviewers(function() {
+			console.log('Interviewers List:');
+			console.log($scope.interviewersList);
+			console.log('interviewersMap');
+			console.log($scope.interviewersMap);
+		});
+		APIService.getApplicants(function() {
+			console.log('applicantsList');
+			console.log($scope.applicantsList);
+			console.log('applicantsMap');
+			console.log($scope.applicantsMap);
+		});
+	}
+	init();
+}
+function ApplicantCntl($scope, $routeParams, APIService) {
+
+	$scope.editApplicantInfo = false;
+
+	var updateApplicantInfoShow = function(){
+		$scope.editApplicantInfo = true;
+		$('#updateApplicantInfo-btn').html('<h3>Save</h3>');
+	}
+	var updateApplicantInfoSave = function() {
+		/* TODO: PUT WITH APISERVICE */
+		$scope.editApplicantInfo = false;
+		$('#updateApplicantInfo-btn').html('<h3>Edit</h3>');
+	}
+
+	$scope.updateApplicantInfo = function(){
+		$scope.editApplicantInfo ? updateApplicantInfoSave() : updateApplicantInfoShow();
+	}	
+	var init = function() {
+		APIService.getApplicant($routeParams.id, function() {
+			console.log('applicant:');
+			console.log($scope.applicant);
+		});
+		APIService.getInterviewers(function() {
+			console.log('Interviewers List:');
+			console.log($scope.interviewersList);
+			console.log('interviewersMap');
+			console.log($scope.interviewersMap);
+		});
 	}
 	init();
 }
 
-function InterviewersCntl($scope, $location) {
+function AllInterviewersCntl($scope, UIService, APIService) {
+	/* ALEX SPANGER EDITS HERE */
 
+}
+
+function InterviewerCntl($scope, $location) {
+	/* ALEX SPANGER EDITS HERE */
 
 	var init = function() {
 
