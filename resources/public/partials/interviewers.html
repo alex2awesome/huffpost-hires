@@ -1,0 +1,42 @@
+
+<div class='container main-container' id='interviewers'>
+
+    <div id="interviewer-container" class="panel panel-primary">
+        <div class="panel-heading">
+            <button id="add-interviewer-button" ng-click="addNewPressed()" class="add-btn btn btn-success">+</button>
+            <span>Interviewers</span>
+            <input class='search' id='search-interviewers' type="search" ng-model="interviewers_filter" placeholder="filter interviewers" />
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Tasks</th>
+                        <th>Next task due on:</th>
+                    <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-show="addNew==true">
+                        <td><input type='text' placeholder='Full name' ng-model='new_interviewer.name'></td>
+                        <td><input type='text' placeholder='Email' ng-model='new_interviewer.email'></td>
+                        <td><input type='text' placeholder='Phone' ng-model='new_interviewer.Phone'></td>
+
+                        <td><button id="add-interviewer" ng-click="addInterviewer(new_interviewer)" class="btn btn-success">Add</button></td>
+                    </tr>
+
+                    <tr ng-repeat="interviewer in interviewerList | filter:interviewers_filter | orderBy:'asof':true">
+                        <td class="interviewer-name"><a href="/interviewer?id={{interviewer.id}}">{{interviewer.name}}</a></td>
+                        <td class="interviewer-email">{{interviewer.email}}</td>
+<!--                        <td class="interviewer-goalie">{{interviewersMap[applicant.goalie].name}}</td>-->
+                        <td class="interviewer-phone">{{interviewer.phone}}</td>
+                        <td class="interviewer-tasks">{{interviewer.tasks}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
