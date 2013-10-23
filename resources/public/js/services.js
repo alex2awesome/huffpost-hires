@@ -8,6 +8,12 @@ HiresApp.factory('APIService', function($rootScope, $http, $q){
 
   return {
 
+    listToMap: function(list) {
+      var map = {};
+      $.each(list, function(i) { map[list[i].id] = list[i]; });
+      return map;
+    },
+
     http: function(method, url, data) {
       var deferred = $q.defer();
       $http({
@@ -41,7 +47,19 @@ HiresApp.factory('APIService', function($rootScope, $http, $q){
     getTasksByApplicant: function(applicantID) {
       console.log($rootScope.tasksList);
       return $rootScope.tasksList;
-    }
+    },
+    getInterviewers: function(callback) {
+      this.httpGET('/interviewer/all').then(function(returnedData) {
+        $rootScope.interviewersList = returnedData;
+        if (callback) callback();
+      });
+    },
+    getApplicants: function(callback) {
+      this.httpGET('/applicant/all').then(function(returnedData) {
+        $rootScope.applicantsList = returnedData;
+        if(callback) callback();
+      });
+    },
 
 
   }

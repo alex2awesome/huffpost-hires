@@ -14,15 +14,17 @@ var task1 = {'id':0, 'title':'Resume Review', 'applicant':app1.id, 'interviewer'
 var task2 = {'id':1, 'title':'Resume Review', 'applicant':app1.id, 'interviewer':interviewer1.id,'feedback':'','completed':false,'pass-fail':true,'date':'datetime','feedback-due':'datetime'};
 var task3 = {'id':2, 'title':'Resume Review', 'applicant':app1.id, 'interviewer':interviewer1.id,'feedback':'','completed':false,'pass-fail':true,'date':'datetime','feedback-due':'datetime'};
 
-function MainCntl($scope, $location, UIService) {
+function MainCntl($scope, $location, UIService, APIService) {
 	$scope.domain = window.location.origin;
 
-	$scope.interviewersMap = {0:interviewer1,1:interviewer2,2:interviewer3};
-	$scope.interviewersList = [interviewer1, interviewer2, interviewer3];
-	$scope.applicants = {0: app1,1:app2,2:app3};
+	$scope.interviewersMap; //= {0:interviewer1,1:interviewer2,2:interviewer3};
+	$scope.interviewersList; //= [interviewer1, interviewer2, interviewer3];
+	
+	$scope.applicantsList;
+	$scope.applicantsMap; // = {0: app1,1:app2,2:app3};
 
-	$scope.tasksMap = {0:task1, 1: task2, 2: task3};
-	$scope.tasksList = [task1, task2, task3];
+	$scope.tasksMap; //= {0:task1, 1: task2, 2: task3};
+	$scope.tasksList; //= [task1, task2, task3];
 
 	$scope.addNew = false;
 
@@ -45,16 +47,27 @@ function MainCntl($scope, $location, UIService) {
 
 
 	var init = function() {
-
+		APIService.getInterviewers(function() {
+			$scope.interviewersMap = APIService.listToMap($scope.interviewersList);
+			console.log('Interviewers List:');
+			console.log($scope.interviewersList);
+			console.log('interviewersMap');
+			console.log($scope.interviewersMap);
+		});
+		///*
+		APIService.getApplicants(function() {
+			$scope.applicantsMap = APIService.listToMap($scope.applicantsList);
+			console.log('applicantsList');
+			console.log($scope.applicantsList);
+			console.log('applicantsMap');
+			console.log($scope.applicantsMap);
+		})
+		//*/
 		$('.popover-hover').popover({trigger: 'hover'});	
 	}
 	init();
 }
 function ApplicantCntl($scope, $routeParams, APIService) {
-	/* TODO: SEND IN RESOLVE? */
-	$scope.applicant = $scope.applicants[$routeParams.id];
-
-	console.log($scope.tasksList);
 
 	$scope.applicantTasks;
 
@@ -74,9 +87,25 @@ function ApplicantCntl($scope, $routeParams, APIService) {
 		$scope.editApplicantInfo ? updateApplicantInfoSave() : updateApplicantInfoShow();
 	}	
 	var init = function() {
-		$scope.applicantTasks = APIService.getTasksByApplicant($scope.applicant.id);
-	
-		console.log($scope.applicantTasks);
+		APIService.getInterviewers(function() {
+			$scope.interviewersMap = APIService.listToMap($scope.interviewersList);
+			console.log('Interviewers List:');
+			console.log($scope.interviewersList);
+			console.log('interviewersMap');
+			console.log($scope.interviewersMap);
+		});
+		///*
+		APIService.getApplicants(function() {
+			$scope.applicantsMap = APIService.listToMap($scope.applicantsList);
+			console.log('applicantsList');
+			console.log($scope.applicantsList);
+			console.log('applicantsMap');
+			console.log($scope.applicantsMap);
+
+			/* TODO: SEND IN RESOLVE? */
+			$scope.applicant = $scope.applicantsMap[$routeParams.id];
+		})
+		//*/
 	}
 	init();
 }
@@ -99,9 +128,6 @@ function AllApplicantsCntl($scope, $location) {
 
 
 	var init = function() {
-		console.log($scope.applicants);
-		console.log('interviewers:');
-		console.log($scope.interviewersMap);
 	}
 	init();
 }

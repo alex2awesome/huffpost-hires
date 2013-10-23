@@ -31,7 +31,7 @@
                         <td><button id="add-applicant" ng-click="addApplicant(new_applicant)" class="btn btn-success">Add</button></td>
                     </tr>
 
-                    <tr ng-repeat="applicant in applicants | filter:applicants_filter | orderBy:'asof':true">
+                    <tr ng-repeat="applicant in applicantsList | filter:applicants_filter | orderBy:'asof':true">
                         <td class="applicant-name"><a href="/applicant?id={{applicant.id}}">{{applicant.name}}</a></td>
                         <td class="applicant-role">{{applicant.role}}</td>
                         <td class="applicant-goalie">{{interviewersMap[applicant.goalie].name}}</td>

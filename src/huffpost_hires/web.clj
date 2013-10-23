@@ -43,11 +43,16 @@
 (defroutes app
   (ANY "/repl" {:as req}
        (drawbridge req))
-  (GET "/interviewers" [] api/interviewers-all)
-  (GET "/test" []
+
+  (GET "/api/*/*" [] api/handle-get-request)
+  (POST "/api/*/*" [] api/handle-post-request)
+  (PUT "/api/*/*" [] api/handle-put-request)
+  (DELETE "/api/*/*" [] api/handle-delete-request)
+  (GET "/api" []
        {:status 200
         :headers {"Content-Type" "text/plain"}
-        :body (pr-str ["Hello" :from 'Alex])})
+        :body (pr-str ["Hello" :from 'api])})
+
   (GET "/partials/*" [] serve-partial)
   (GET "/applicants" [] serve-hires)
   (GET "/interviewers" [] serve-hires)
