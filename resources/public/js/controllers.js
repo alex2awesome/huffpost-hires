@@ -52,7 +52,6 @@ function AllApplicantsCntl($scope, $location, APIService) {
 
 		new_applicant.goalie = new_applicant.goalie.id;
 		/* TODO -- POST TO SERVER */
-		new_applicant['id'] = $scope.applicants.length;
 		$scope.applicants[new_applicant.id] = new_applicant;
 		$scope.new_applicant = null;
 		$scope.hideAddNew();
